@@ -1,0 +1,158 @@
+Reading pref.tcl
+
+# 2020.4
+
+# vsim -c -sv_seed random -do "sim.do" -do "cov.do" "+n100" reg_tb 
+# Start time: 21:29:40 on Jun 14,2023
+# ** Note: (vsim-3812) Design is being optimized...
+# //  Questa Sim-64
+# //  Version 2020.4 linux_x86_64 Oct 13 2020
+# //
+# //  Copyright 1991-2020 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.reg_tb_sv_unit(fast)
+# Loading work.reg_tb(fast)
+# Loading work.reg_wrap(fast)
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading work.reg_dut(synchronous)#1
+# Loading work.reg_if(fast)
+# Sv_Seed = 2495793482
+# do sim.do
+
+########## SIMULATION STARTS ##########
+
+# [CONFIG] Number of test cycles set to 100
+# 
+# TEST #1 - Launching reg quiet test...
+# TEST #1 - Test completed!
+# TEST #1 - Functional coverage: 100.00%
+# 
+# TEST #2 - Launching reg verbose test...
+# [   1075] | data in: 01111111 (127) | data out: 01111111 (127) | reset: 1
+# [   1085] | data in: 00000000 (  0) | data out: 00000000 (  0) | reset: 1
+# [   1095] | data in: 11011011 (219) | data out: 11011011 (219) | reset: 1
+# [   1105] | data in: 11111111 (255) | data out: 11111111 (255) | reset: 1
+# [   1115] | data in: 11111101 (253) | data out: 11111101 (253) | reset: 1
+# [   1125] | data in: 00000011 (  3) | data out: 00000011 (  3) | reset: 1
+# [   1135] | data in: 10110101 (181) | data out: 10110101 (181) | reset: 1
+# [   1145] | data in: 10101000 (168) | data out: 10101000 (168) | reset: 1
+# [   1155] | data in: 10001100 (140) | data out: 10001100 (140) | reset: 1
+# [   1165] | data in: 01101110 (110) | data out: 01101110 (110) | reset: 1
+# [   1175] | data in: 11011011 (219) | data out: 00000000 (  0) | reset: 0
+# [   1185] | data in: 00011101 ( 29) | data out: 00011101 ( 29) | reset: 1
+# [   1195] | data in: 01011001 ( 89) | data out: 01011001 ( 89) | reset: 1
+# [   1205] | data in: 00100011 ( 35) | data out: 00100011 ( 35) | reset: 1
+# [   1215] | data in: 11010000 (208) | data out: 11010000 (208) | reset: 1
+# [   1225] | data in: 00001101 ( 13) | data out: 00001101 ( 13) | reset: 1
+# [   1235] | data in: 01110111 (119) | data out: 01110111 (119) | reset: 1
+# [   1245] | data in: 10101010 (170) | data out: 10101010 (170) | reset: 1
+# [   1255] | data in: 11000111 (199) | data out: 11000111 (199) | reset: 1
+# [   1265] | data in: 00000000 (  0) | data out: 00000000 (  0) | reset: 1
+# [   1275] | data in: 01001110 ( 78) | data out: 01001110 ( 78) | reset: 1
+# [   1285] | data in: 01110101 (117) | data out: 01110101 (117) | reset: 1
+# [   1295] | data in: 10010101 (149) | data out: 10010101 (149) | reset: 1
+# [   1305] | data in: 01100010 ( 98) | data out: 01100010 ( 98) | reset: 1
+# [   1315] | data in: 11010111 (215) | data out: 11010111 (215) | reset: 1
+# [   1325] | data in: 01100111 (103) | data out: 01100111 (103) | reset: 1
+# [   1335] | data in: 01011010 ( 90) | data out: 01011010 ( 90) | reset: 1
+# [   1345] | data in: 11110001 (241) | data out: 11110001 (241) | reset: 1
+# [   1355] | data in: 00000101 (  5) | data out: 00000101 (  5) | reset: 1
+# [   1365] | data in: 11101010 (234) | data out: 11101010 (234) | reset: 1
+# [   1375] | data in: 11111111 (255) | data out: 11111111 (255) | reset: 1
+# [   1385] | data in: 00111100 ( 60) | data out: 00111100 ( 60) | reset: 1
+# [   1395] | data in: 10100010 (162) | data out: 10100010 (162) | reset: 1
+# [   1405] | data in: 00010101 ( 21) | data out: 00010101 ( 21) | reset: 1
+# [   1415] | data in: 01101010 (106) | data out: 01101010 (106) | reset: 1
+# [   1425] | data in: 11100111 (231) | data out: 11100111 (231) | reset: 1
+# [   1435] | data in: 11001010 (202) | data out: 11001010 (202) | reset: 1
+# [   1445] | data in: 00101000 ( 40) | data out: 00101000 ( 40) | reset: 1
+# [   1455] | data in: 00111100 ( 60) | data out: 00111100 ( 60) | reset: 1
+# [   1465] | data in: 00000000 (  0) | data out: 00000000 (  0) | reset: 1
+# [   1475] | data in: 01010000 ( 80) | data out: 01010000 ( 80) | reset: 1
+# [   1485] | data in: 01001110 ( 78) | data out: 01001110 ( 78) | reset: 1
+# [   1495] | data in: 11111111 (255) | data out: 11111111 (255) | reset: 1
+# [   1505] | data in: 10010101 (149) | data out: 10010101 (149) | reset: 1
+# [   1515] | data in: 01010110 ( 86) | data out: 01010110 ( 86) | reset: 1
+# [   1525] | data in: 11011000 (216) | data out: 11011000 (216) | reset: 1
+# [   1535] | data in: 10100001 (161) | data out: 00000000 (  0) | reset: 0
+# [   1545] | data in: 11111010 (250) | data out: 11111010 (250) | reset: 1
+# [   1555] | data in: 01001110 ( 78) | data out: 01001110 ( 78) | reset: 1
+# [   1565] | data in: 11011001 (217) | data out: 00000000 (  0) | reset: 0
+# [   1575] | data in: 00010010 ( 18) | data out: 00010010 ( 18) | reset: 1
+# [   1585] | data in: 10000010 (130) | data out: 10000010 (130) | reset: 1
+# [   1595] | data in: 00001010 ( 10) | data out: 00001010 ( 10) | reset: 1
+# [   1605] | data in: 00011000 ( 24) | data out: 00011000 ( 24) | reset: 1
+# [   1615] | data in: 11101011 (235) | data out: 11101011 (235) | reset: 1
+# [   1625] | data in: 00011100 ( 28) | data out: 00011100 ( 28) | reset: 1
+# [   1635] | data in: 11101110 (238) | data out: 11101110 (238) | reset: 1
+# [   1645] | data in: 11110101 (245) | data out: 00000000 (  0) | reset: 0
+# [   1655] | data in: 00010010 ( 18) | data out: 00010010 ( 18) | reset: 1
+# [   1665] | data in: 11011011 (219) | data out: 11011011 (219) | reset: 1
+# [   1675] | data in: 10101000 (168) | data out: 10101000 (168) | reset: 1
+# [   1685] | data in: 10011000 (152) | data out: 10011000 (152) | reset: 1
+# [   1695] | data in: 11000110 (198) | data out: 11000110 (198) | reset: 1
+# [   1705] | data in: 01011101 ( 93) | data out: 01011101 ( 93) | reset: 1
+# [   1715] | data in: 00001111 ( 15) | data out: 00001111 ( 15) | reset: 1
+# [   1725] | data in: 00010110 ( 22) | data out: 00010110 ( 22) | reset: 1
+# [   1735] | data in: 10110000 (176) | data out: 10110000 (176) | reset: 1
+# [   1745] | data in: 10001010 (138) | data out: 10001010 (138) | reset: 1
+# [   1755] | data in: 11000010 (194) | data out: 11000010 (194) | reset: 1
+# [   1765] | data in: 01100100 (100) | data out: 00000000 (  0) | reset: 0
+# [   1775] | data in: 00001111 ( 15) | data out: 00001111 ( 15) | reset: 1
+# [   1785] | data in: 00000110 (  6) | data out: 00000110 (  6) | reset: 1
+# [   1795] | data in: 10010111 (151) | data out: 10010111 (151) | reset: 1
+# [   1805] | data in: 10010101 (149) | data out: 10010101 (149) | reset: 1
+# [   1815] | data in: 10010010 (146) | data out: 10010010 (146) | reset: 1
+# [   1825] | data in: 10001111 (143) | data out: 10001111 (143) | reset: 1
+# [   1835] | data in: 11111111 (255) | data out: 11111111 (255) | reset: 1
+# [   1845] | data in: 11011110 (222) | data out: 11011110 (222) | reset: 1
+# [   1855] | data in: 00101001 ( 41) | data out: 00101001 ( 41) | reset: 1
+# [   1865] | data in: 10011101 (157) | data out: 00000000 (  0) | reset: 0
+# [   1875] | data in: 00111001 ( 57) | data out: 00111001 ( 57) | reset: 1
+# [   1885] | data in: 11111111 (255) | data out: 11111111 (255) | reset: 1
+# [   1895] | data in: 11101000 (232) | data out: 11101000 (232) | reset: 1
+# [   1905] | data in: 00001111 ( 15) | data out: 00001111 ( 15) | reset: 1
+# [   1915] | data in: 10100010 (162) | data out: 10100010 (162) | reset: 1
+# [   1925] | data in: 00010110 ( 22) | data out: 00010110 ( 22) | reset: 1
+# [   1935] | data in: 00100000 ( 32) | data out: 00100000 ( 32) | reset: 1
+# [   1945] | data in: 11011100 (220) | data out: 11011100 (220) | reset: 1
+# [   1955] | data in: 11110001 (241) | data out: 11110001 (241) | reset: 1
+# [   1965] | data in: 10110001 (177) | data out: 10110001 (177) | reset: 1
+# [   1975] | data in: 10111001 (185) | data out: 10111001 (185) | reset: 1
+# [   1985] | data in: 11111011 (251) | data out: 11111011 (251) | reset: 1
+# [   1995] | data in: 10100010 (162) | data out: 10100010 (162) | reset: 1
+# [   2005] | data in: 10000111 (135) | data out: 10000111 (135) | reset: 1
+# [   2015] | data in: 10011010 (154) | data out: 10011010 (154) | reset: 1
+# [   2025] | data in: 10001010 (138) | data out: 10001010 (138) | reset: 1
+# [   2035] | data in: 01110100 (116) | data out: 00000000 (  0) | reset: 0
+# [   2045] | data in: 00000010 (  2) | data out: 00000000 (  0) | reset: 0
+# [   2055] | data in: 00001000 (  8) | data out: 00001000 (  8) | reset: 1
+# [   2065] | data in: 01010000 ( 80) | data out: 01010000 ( 80) | reset: 1
+# TEST #2 - Test completed!
+# TEST #2 - Functional coverage: 100.00%
+# 
+# TOTAL FUNCTIONAL COVERAGE: 100.00%
+# 
+### TEST PASSED!
+# 
+# ** Note: $stop    : ../tb/reg_tb.sv(94)
+#    Time: 2065 ns  Iteration: 1  Instance: /reg_tb
+# Break at ../tb/reg_tb.sv line 94
+# Stopped at ../tb/reg_tb.sv line 94
+
+##########  SIMULATION ENDS  ##########
+
+# End time: 21:29:41 on Jun 14,2023, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
