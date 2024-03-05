@@ -8,33 +8,27 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: alu_pkg.sv
+// File: alu_wrap.sv
 // Author: Michele Caon
 // Date: 31/05/2022
 
 /*
- * File: alu_pkg.sv
+ * File: alu_wrap.sv
  * ----------------------------------------
- * Type definitions for the ALU described in 'alu.sv'
+ * A simple wrapper to use the interface defined in 'alu_if.sv' 
+ * instead of direct port mapping. This component also allows to
+ * connect the interface to a VHDL DUT (compiled separately).
  */
 
-`ifndef ALU_PKG_SV_
-`define ALU_PKG_SV_
-
-/* ALU operation data type */
-package alu_pkg;
-    typedef enum logic[3:0] { 
-        ADD, 
-        SUB, 
-        MULT, 
-        BITAND, 
-        BITOR, 
-        BITXOR, 
-        FUNCLSL, 
-        FUNCLSR, 
-        FUNCRL, 
-        FUNCRR
-    } alu_op_t;
-endpackage
-
-`endif /* ALU_PKG_SV_ */
+module alu_wrap #(parameter DWIDTH = 32) (
+    alu_if.alu_port p
+);
+    alu #(DWIDTH) alu_u (
+        .clk_i      (p.clk),
+        .rst_n_i    (p.rst_n),
+        .alu_op_i   (p.alu_op),
+        .alu_a_i    (p.alu_a),
+        .alu_b_i    (p.alu_b),
+        .alu_res_o  (p.alu_res)
+    );
+endmodule
