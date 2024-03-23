@@ -8,27 +8,24 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: alu_wrap.sv
+// File: mul_wrap.sv
 // Author: Michele Caon
 // Date: 31/05/2022
 
 /*
- * File: alu_wrap.sv
+ * File: mul_wrap.sv
  * ----------------------------------------
  * A simple wrapper to use the interface defined in 'alu_if.sv' 
  * instead of direct port mapping. This component also allows to
  * connect the interface to a VHDL DUT (compiled separately).
  */
 
-module alu_wrap #(parameter DWIDTH = 32) (
-    alu_if.alu_port p
+module mul_wrap #(parameter DWIDTH = 11) (
+    mul_if.mul_port p
 );
-    alu #(DWIDTH) alu_u (
-        .clk_i      (p.clk),
-        .rst_n_i    (p.rst_n),
-        .alu_op_i   (p.alu_op),
-        .alu_a_i    (p.alu_a),
-        .alu_b_i    (p.alu_b),
-        .alu_res_o  (p.alu_res)
+    multiplier #(DWIDTH) mul_u (
+        .A    (p.mul_a),
+        .B    (p.mul_b),
+        .result  (p.mul_res)
     );
 endmodule

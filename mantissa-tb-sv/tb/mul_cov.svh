@@ -8,94 +8,78 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: alu_cov.svh
+// File: mul_cov.svh
 // Author: Michele Caon
 // Date: 06/06/2022
 
-// File: alu_cov.svh
+
 // ----------------------------------------
 // Classes containig the methods and covergroup to compute the functional
-// coverage of the ALU.
+// coverage of the xx.
 
-`ifndef ALU_COV_SVH_
-`define ALU_COV_SVH_
+`ifndef MUL_COV_SVH_
+`define MUL_COV_SVH_
 
-import alu_pkg::*;
-
-class alu_cov #(
-    parameter DWIDTH = 8
+class mul_cov #(
+    parameter DWIDTH = 11
 );
     // ---------
     // VARIABLES
     // ---------
     
     // Adder interface
-    local virtual interface alu_if #(DWIDTH) aif;
+    local virtual interface mul_if #(DWIDTH) mulif;
     
     // -------------------
     // FUNCTIONAL COVERAGE
     // -------------------
 
-    // ALU coverage
-    covergroup alu_cg;
-        // Operations
-        op_cp: coverpoint aif.alu_op iff (aif.rst_n) {
-            bins add        = {ADD};
-            bins sub        = {SUB};
-            bins mult       = {MULT};
-            bins bitand     = {BITAND};
-            bins bitor      = {BITOR};
-            bins bitxor     = {BITXOR};
-            bins funclsl    = {FUNCLSL};
-            bins funclsr    = {FUNCLSR};
-            bins funcrl     = {FUNCRL};
-            bins funcrr     = {FUNCRR};
-        }
-
+  
+    covergroup mul_cg;
         // Operands
-        a_cp: coverpoint aif.alu_a iff (aif.rst_n) {
+        mula_cp: coverpoint mulif.mul_a {
             bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
             bins others     = default;
         }
-        b_cp: coverpoint aif.alu_b iff (aif.rst_n) {
+        mulb_cp: coverpoint mulif.mul_b {
             bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
             bins others     = default;
         }
-    endgroup: alu_cg
+    endgroup: mul_cg
 
     // -------
     // METHODS
     // -------
 
     // Constructor
-    function new(virtual interface alu_if #(DWIDTH) _if);
-        aif         = _if;
-        alu_cg      = new();
+    function new(virtual interface mul_if #(DWIDTH) _if);
+        mulif         = _if;
+        mul_cg      = new();
 
         // disable the covergroup by default
-        alu_cg.stop();
+        mul_cg.stop();
     endfunction: new
 
     // Enable operands coverage
     function void cov_start();
-        alu_cg.start();
+        mul_cg.start();
     endfunction: cov_start
 
     // Disable operands coverage
     function void cov_stop();
-        alu_cg.stop();
+        mul_cg.stop();
     endfunction: cov_stop
 
     // Sample operands coverage
     function void cov_sample();
-        alu_cg.sample();
+      mul_cg.sample();
     endfunction: cov_sample
 
     // Return operands coverage
     function real get_cov();
-        return alu_cg.get_inst_coverage();
+        return mul_cg.get_inst_coverage();
     endfunction: get_cov
     
-endclass // alu_cov
+endclass // mul_cov
 
-`endif /* ALU_COV_SVH_ */
+`endif /* MUL_COV_SVH_ */

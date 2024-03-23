@@ -8,48 +8,38 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: alu_if.sv
+// File: mul_if.sv
 // Author: Michele Caon
 // Date: 31/05/2022
 
 /*
- * File: alu_if.sv
+ * File: mul_if.sv
  * ----------------------------------------
  * Interface with the ALU wrapper in 'alu_wrap.sv'.
  */
 
-import alu_pkg::*;  // for alu_op_t
 
-interface alu_if #(parameter DWIDTH = 32);
+interface mul_if #(parameter DWIDTH = 11);
 
     /* INTERFACE SIGNALS */
-    logic               clk;
-    logic               rst_n;
-    alu_op_t            alu_op;
-    logic [DWIDTH-1:0]  alu_a;
-    logic [DWIDTH-1:0]  alu_b;
-    logic [DWIDTH-1:0]  alu_res;
+    logic [DWIDTH-1:0]  mul_a;
+    logic [DWIDTH-1:0]  mul_b;
+    logic [2*DWIDTH-1:0]  mul_res;
+    logic clk;
 
     /* INTERFACE SIGNALS MODE MAPPING */
 
-    /* Interface port at ALU side (DUT) */
-    modport alu_port (
-        input   clk,
-        input   rst_n,
-        input   alu_op,
-        input   alu_a,
-        input   alu_b,
-        output  alu_res
+    modport mul_port (
+        input   mul_a,
+        input   mul_b,
+        output  mul_res
     );
 
     /* Interface port at driver side (unused since the driver is a class) */
-    modport driver_port (
-        input   clk,
-        input   rst_n,
-        output  alu_op,
-        output  alu_a,
-        output  alu_b,
-        input   alu_res
+    modport driver_port (  
+        output  mul_a,
+        output  mul_b,
+        input   mul_res
     );
 
     /*
@@ -59,33 +49,19 @@ interface alu_if #(parameter DWIDTH = 32);
      * ALU and to check that the result is consistent with the input.
      */
 
-    /******************************************************************************/
-    /* CLOCK GENERATION */
-
-    // Initialize clock and reset
     initial begin: init
         clk     = 1'b1;
-        rst_n   = 1'b1;
     end
 
     // Generate clock
     always #5ns begin: clk_gen
         clk = ~clk;
     end
-
-    // Reset the DUT
-    task rst_dut();
-        @(negedge clk);
-        rst_n   = 1'b0;
-        @(negedge clk);
-        rst_n   = 1'b1;
-    endtask // rst_dut
-
     // ----------
     // ASSERTIONS
     // ----------
     `ifndef SYNTHESIS
-    `include "alu_if_sva.svh"
+    `include "mul_if_sva.svh"
     `endif /* SYNTHESIS */
 
-endinterface // alu_if
+endinterface // mul_if

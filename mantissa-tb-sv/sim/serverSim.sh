@@ -10,7 +10,7 @@ if [[ "$1" == "--help" ||  $# -lt 3 ]]; then
   echo "Example:"
   echo "  $0 /path/to/local/folder   /path/to/remote/folder simulation_script_name"
   echo "In the main folder of the project (for example reg-tb):"
-  echo "  ./sim/serverSim.sh /home/riccardo/git/socws/reg-tb /home/2023-socv-6/git/reg-tb simulate.sh"
+  echo "  ./sim/serverSim.sh /home/riccardo/git/isa/verification/mantissa-tb-sv /home/isa09_2023_2024/lab4/mantissa-tb-sv sim.sh"
   exit 0
 fi
 

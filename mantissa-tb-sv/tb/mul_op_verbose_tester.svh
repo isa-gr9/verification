@@ -8,19 +8,19 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 //
-// File: alu_op_verbose_tester.svh
+// File: mul_op_verbose_tester.svh
 // Author: Michele Caon
 // Date: 02/06/2022
 
-`ifndef ALU_OP_VERBOSE_TESTER_SVH_
-`define ALU_OP_VERBOSE_TESTER_SVH_
+`ifndef MUL_OP_VERBOSE_TESTER_SVH_
+`define MUL_OP_VERBOSE_TESTER_SVH_
 
-`include "alu_verbose_tester.svh"
+`include "mul_verbose_tester.svh"
 
-/* ALU verbose tester class (one operation only) */
-class alu_op_verbose_tester #(
-    parameter DWIDTH    = 32
-) extends alu_verbose_tester #(DWIDTH);    // inherits methods and variables from alu_verbose_tester
+/* MUL verbose tester class (one operation only) */
+class mul_op_verbose_tester #(
+    parameter DWIDTH    = 11
+) extends mul_verbose_tester #(DWIDTH);    // inherits methods and variables from alu_verbose_tester
 
     // ALU operation
     alu_op_t    req_op = ADD;

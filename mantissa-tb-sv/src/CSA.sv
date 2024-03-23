@@ -9,7 +9,7 @@ module CSA #(parameter int sizeCSA = 22, int sizeRCA = 4) (
     );
 
 parameter int tempSize = ((sizeCSA / sizeRCA) + 1) * sizeRCA;
-logic carrySel[(sizeCSA/sizeRCA)-1 : 0];
+logic carrySel[(tempSize/sizeRCA)-1 : 0];
 
 logic [tempSize-1 : 0] A_temp;
 logic [tempSize-1 : 0] B_temp;
