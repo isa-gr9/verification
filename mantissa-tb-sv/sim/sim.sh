@@ -22,7 +22,7 @@
 
 vlog -F compile.f
 
-vsim -c -sv_seed random -do sim.do +n100 mul_tb -do cov.do | tee report-sim.log
+vsim -c -sv_seed random -do sim.do +n1000 mul_tb -do cov.do | tee report-sim.log
 
 
 # Remove work directory

@@ -55,13 +55,13 @@ class mul_tester #(
     constraint ab_dist_c {
         mul_op.a dist {
             0                   :=10, 
-            (1<<DWIDTH)-1       :=20,
+            (1<<DWIDTH)-1       :=10,
             (1<<(DWIDTH-1))-1   :=10, 
             [1:(1<<DWIDTH)-2]   :=1
         };
         mul_op.b dist {
             0                   :=10, 
-            (1<<DWIDTH)-1       :=20,
+            (1<<DWIDTH)-1       :=10,
             (1<<(DWIDTH-1))-1   :=10, 
             [1:(1<<DWIDTH)-2]   :=1
         };
