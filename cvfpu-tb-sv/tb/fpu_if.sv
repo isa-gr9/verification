@@ -19,6 +19,7 @@
  */
 
 import fpnew_pkg::*;
+import cf_math_pkg::*;
 
 interface fpu_if #();
 

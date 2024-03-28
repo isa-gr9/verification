@@ -24,14 +24,15 @@
 
 /* ALU verbose tester class */
 class fpu_verbose_tester #(
-    parameter DWIDTH    = 16
-) extends fpu_tester #(DWIDTH);    // inherits methods and variables from alu_tester
+    parameter DWIDTH    = 16,
+    parameter NUM_OPERANDS = 3
+) extends fpu_tester #(DWIDTH, NUM_OPERANDS);    // inherits methods and variables from alu_tester
 
     // Operands queue
     op_t    opq[$];
     
     // Use the constructor from the parent class
-    function new(virtual interface fpu_if #(DWIDTH) _if);
+    function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if);
         super.new(_if);
         opq = {};
     endfunction // new()

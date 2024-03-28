@@ -42,16 +42,20 @@ class fpu_tester #(
      * handle to a proper interface object is passed to the 
      * constructor (see below) by the TB in 'alu_tb.sv'.
      */
-    virtual interface fpu_if #(DWIDTH) taif;
+    virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) taif;
 
     // Random ALU operation and inputs (updated by the 'randomize()' method)
     typedef struct packed {
-        fpnew_pkg::operation_e            op;
-        logic [DWIDTH-1:0]                operands
+        fpnew_pkg::operation_e                          op;
+        logic [NUM_OPERANDS-1:0][DWIDTH-1:0]            operands
     } op_t;
     protected rand fpnew_pkg::operation_e     op;
 
     // DA CAPIRE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //basta fare tipo op.operands[0] dist {...}
+    //op.operands[1] ....
+    //op.operands[2] ....
+    //???
     constraint ab_dist_c {
         op.operands dist {
             0                   :=10, 
@@ -70,13 +74,13 @@ class fpu_tester #(
     // ALU coverage
     // NOTE: declared as static so it's shared among multiple class
     // instances.
-    protected static fpu_cov #(DWIDTH)  fpucov;
+    protected static fpu_cov #(DWIDTH, NUM_OPERANDS)  fpucov;
 
     // METHODS
     // -------
 
     // Constructor
-    function new(virtual interface fpu_if #(DWIDTH) _if); //CI VA IL NUM_OPERANDS??????????????
+    function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if); 
         taif = _if;   // get the handle to the ALU interface from the TB
         fpcov = new(_if);
     endfunction // new()

@@ -21,6 +21,7 @@
 `define FPU_COV_SVH_
 
 import fpu_pkg::*;
+import cf_math_pkg::*;
 
 class fpu_cov #(
     parameter DWIDTH = 16,
@@ -31,7 +32,7 @@ class fpu_cov #(
     // ---------
     
     // Adder interface
-    local virtual interface fpu_if #(DWIDTH) fpuif;
+    local virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) fpuif;
     
     // -------------------
     // FUNCTIONAL COVERAGE
@@ -60,7 +61,7 @@ class fpu_cov #(
     // -------
 
     // Constructor
-    function new(virtual interface fpu_if #(DWIDTH) _if); //CI VA ANCHE NUM_OPERANDS??
+    function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if);
         fpuif         = _if;
         fpu_cg      = new();
 

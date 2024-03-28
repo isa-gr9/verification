@@ -36,17 +36,17 @@ module fpu_tb;
     localparam DWIDTH   = 16;
 
     /* Instantiate ALU interface */
-    fpu_if #(DWIDTH)    fpuif();
+    fpu_if #(DWIDTH, NUM_OPERANDS)    fpuif();
 
     /* Instantiate ALU wrapper */
-    fpu_wrap #(DWIDTH)  fpuw(fpuif.fpu_port);
+    fpu_wrap #(DWIDTH, NUM_OPERANDS)  fpuw(fpuif.fpu_port);
 
     /* Declare a quiet tester object */
-    fpu_tester #(DWIDTH) tst;
+    fpu_tester #(DWIDTH, NUM_OPERANDS) tst;
 
     /* Declare a verbose tester object */
-    fpu_verbose_tester #(DWIDTH) vtst;
-    fpu_op_verbose_tester #(DWIDTH) optst;
+    fpu_verbose_tester #(DWIDTH, NUM_OPERANDS) vtst;
+    fpu_op_verbose_tester #(DWIDTH, NUM_OPERANDS) optst;  //NECESSARIO??
 
     /* Number of test cycles */
     int unsigned    num_cycles = 10;
