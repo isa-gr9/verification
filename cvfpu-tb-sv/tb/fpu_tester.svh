@@ -49,14 +49,9 @@ class fpu_tester #(
         fpnew_pkg::operation_e                          op;
         logic [NUM_OPERANDS-1:0][DWIDTH-1:0]            operands
     } op_t;
-    protected rand fpnew_pkg::operation_e     op;
-
-    // DA CAPIRE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //basta fare tipo op.operands[0] dist {...}
-    //op.operands[1] ....
-    //op.operands[2] ....
-    //???
-    constraint ab_dist_c {
+    //protected rand fpnew_pkg::operation_e     op;
+    
+    /*constraint ab_dist_c {
         op.operands dist {
             0                   :=10, 
             (1<<DWIDTH)-1       :=10,
@@ -70,6 +65,15 @@ class fpu_tester #(
             [1:(1<<DWIDTH)-2]   :=1
         };
     };
+    */
+
+    //WE SHOULD READ ALL THE FILE AND SAVE IT INTO THE ARRAY
+    int fd; // file descriptor
+    int status;
+    logic [19:0][DWIDTH-1:0] ops;
+    fd = $fopen("operands.txt","r");
+    status = $fscanf("%16b",ops); 
+    if(status != 20) error;
 
     // ALU coverage
     // NOTE: declared as static so it's shared among multiple class
@@ -113,7 +117,7 @@ class fpu_tester #(
     protected task init();
         // Reset driver signals
         taif.operands      = 3'b0;
-        taif.op     = ADD;
+        taif.op     = MUL;
 
         // Reset the DUT
         taif.rst_dut();
@@ -121,16 +125,20 @@ class fpu_tester #(
         @(posedge taif.clk);
     endtask: init
     
+
+    int i = 0;
     // Prepare a new ALU operation
     function void rand_fpu_op();
-        // Obtain random operations and operands
+        /* Obtain random operations and operands
         assert (this.randomize())   // check the method's return value
-        else   $error("ERROR while calling 'randomize()' method");
+        else   $error("ERROR while calling 'randomize()' method");*/
 
         // Set the ALU interface signals
-        taif.op   = op.op;
-        taif.operands    = operands.operands; //??????????????
-
+        taif.op   = MUL;
+        taif.operands[0] = ops[i];
+        taif.operands[1] = ops[i+1];
+        i = i+2;
+*/
         // Update coverage
         fpucov.cov_sample();
     endfunction
