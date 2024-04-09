@@ -3,7 +3,7 @@ Reading pref.tcl
 # 2020.4
 
 # vsim -c -sv_seed random -do "sim.do" -do "cov.do" "+n1000" fpu_tb 
-# Start time: 12:39:05 on Apr 09,2024
+# Start time: 20:17:15 on Apr 09,2024
 # ** Note: (vsim-3812) Design is being optimized...
 # ** Warning: ../src/fpnew_top.sv(29): (vopt-13314) Defaulting port 'operands_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
 # ** Warning: ../src/fpnew_opgroup_block.sv(34): (vopt-13314) Defaulting port 'operands_i' kind to 'var' rather than 'wire' due to default compile option setting of -svinputport=relaxed.
@@ -51,13 +51,11 @@ Reading pref.tcl
 #    Time: 0 ns  Iteration: 0  Instance: /fpu_tb/fpuw/fpu_u File: ../tb/fpu_wrap.sv Line: 26
 # ** Warning: (vsim-3015) [PCDPC] - Port size (2) does not match connection size (3) for port 'result_o'. The port definition is at: ../src/fpnew_top.sv(43).
 #    Time: 0 ns  Iteration: 0  Instance: /fpu_tb/fpuw/fpu_u File: ../tb/fpu_wrap.sv Line: 26
-# Sv_Seed = 3875736881
+# Sv_Seed = 3710974427
 # do sim.do
 
 ########## SIMULATION STARTS ##########
 
-# ** Error (suppressible): (vsim-PLI-3068) $fscanf : Invalid argument.
-#    Time: 0 ns  Iteration: 0  Process: /fpu_tb/#INITIAL#57 File: ../tb/fpu_tester.svh Line: 102
 # [CONFIG] Number of test cycles set to 1000
 # 
 # TEST #1 - Launching ALU quiet test...
@@ -2078,5 +2076,5 @@ Reading pref.tcl
 
 ##########  SIMULATION ENDS  ##########
 
-# End time: 12:39:08 on Apr 09,2024, Elapsed time: 0:00:03
-# Errors: 1004, Warnings: 11
+# End time: 20:17:18 on Apr 09,2024, Elapsed time: 0:00:03
+# Errors: 1003, Warnings: 11

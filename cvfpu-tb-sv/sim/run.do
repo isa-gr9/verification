@@ -9,7 +9,7 @@ add wave -position insertpoint sim:/tb_mul/mul/dadda/*
 
 
 
-run 2000 ns
+run 100 ns
 wave zoom full
 #quit -sim
 #exit -f

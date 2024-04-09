@@ -57,8 +57,10 @@ class fpu_tester #(
 
 int fd1; // file descriptor
 int fd2;
-int status;
-logic [19:0][DWIDTH-1:0] ops;
+int status_o;
+int status_r;
+logic [DWIDTH-1:0] ops[0:19];
+logic [DWIDTH-1:0] result;
 
 // Declare variables to store file paths
 string operands_file = "../tb/operands.txt";
@@ -82,13 +84,19 @@ string results_file = "../tb/results.txt";
         $finish;
     end
 
+begin
     // Read from operands.txt
-    status = $fscanf(fd1, "%16b", ops); 
-    if (status != 1) begin
+    int j;
+    for (j = 0; j < 20; j++) begin
+    int status_o;
+    status_o = $fscanf(fd1, "%16b", ops[j]);
+    if (status_o != 1) begin
         $display("Error reading from %s", operands_file);
         $fclose(fd1);
         $finish;
+        end
     end
+end
 
 
     // Open results.txt for reading
@@ -98,9 +106,19 @@ string results_file = "../tb/results.txt";
         $finish;
     end
 
+begin
     // Read from results.txt
-    status = $fscanf(fd2);
+    int k;
+    for (k=0; k<10; k++) begin
+    status_r = $fscanf(fd2, "%16b", result[k]);
+    if (status_r != 1) begin
+        $display("Error reading from %s", results_file);
+        $fclose(fd2);
+        $finish;
+        end
+    end
 
+end
 
 
 
@@ -145,6 +163,7 @@ string results_file = "../tb/results.txt";
     
 
     int i = 0;
+    int k = 0;
     // Prepare a new ALU operation
     function void rand_fpu_op();
         /* Obtain random operations and operands
@@ -156,6 +175,8 @@ string results_file = "../tb/results.txt";
         taif.operands[0] = ops[i];
         taif.operands[1] = ops[i+1];
         taif.operands[2] = 0;
+        taif.result_exp = result[k];
+        k = k+1;
         i = i+2;
         // Update coverage
         fpucov.cov_sample();
