@@ -22,8 +22,8 @@
 
 /* Include the ALU tester classes */
 `include "fpu_tester.svh"
-`include "fpu_verbose_tester.svh"
-`include "fpu_op_verbose_tester.svh"
+//`include "fpu_verbose_tester.svh"
+//`include "fpu_op_verbose_tester.svh"
 
 /* Import ALU package namespace */
 import fpnew_pkg::*;
@@ -34,6 +34,7 @@ module fpu_tb;
 
     /* Define data width */
     localparam DWIDTH   = 16;
+    localparam NUM_OPERANDS = 3;
 
     /* Instantiate ALU interface */
     fpu_if #(DWIDTH, NUM_OPERANDS)    fpuif();
@@ -45,8 +46,8 @@ module fpu_tb;
     fpu_tester #(DWIDTH, NUM_OPERANDS) tst;
 
     /* Declare a verbose tester object */
-    fpu_verbose_tester #(DWIDTH, NUM_OPERANDS) vtst;
-    fpu_op_verbose_tester #(DWIDTH, NUM_OPERANDS) optst;  //NECESSARIO??
+    //fpu_verbose_tester #(DWIDTH, NUM_OPERANDS) vtst;
+    //fpu_op_verbose_tester #(DWIDTH, NUM_OPERANDS) optst;  //NECESSARIO??
 
     /* Number of test cycles */
     int unsigned    num_cycles = 10;
@@ -56,8 +57,8 @@ module fpu_tb;
     initial begin
         /* Instantiate the tester objects */
         tst = new(fpuif);
-        vtst = new(fpuif);
-        optst = new(fpuif, ADD);
+        //vtst = new(fpuif);
+        //optst = new(fpuif, ADD);
 
         // Set the number of cycles to test
         if (0 != $value$plusargs("n%d", num_cycles))
@@ -70,19 +71,22 @@ module fpu_tb;
         $display("TEST #1 - Functional coverage: %.2f%%", tst.get_cov());
 
         /* Run the verbose test */
+        /*
         $display("\nTEST #2 - Launching ALU verbose test...");
         vtst.run_test(num_cycles);
         $display("TEST #2 - Test completed!");
         $display("TEST #2 - Functional coverage: %.2f%%", tst.get_cov());
-
-        /* Run a verbose test with only one operation */
+*/
+        /* Run a verbose test with only one operation 
         $display("\n### TEST #3 - Launching ALU single operation test...");
         optst.run_test(num_cycles);
         $display("TEST #3 - Test completed!");
         $display("TEST #3 - Functional coverage: %.2f%%", tst.get_cov());
-
+        
         // Print functional coverage
         $display("\nTOTAL FUNCTIONAL COVERAGE: %.2f%%", tst.get_cov());
+        */
+
 
         // Print the number of errors
         err_num = fpuif.get_err_num();

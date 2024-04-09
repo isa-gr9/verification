@@ -53,7 +53,7 @@ class fpu_verbose_tester #(
             repeat (num_cycles) begin: driver
                 @(posedge taif.clk);
                 rand_fpu_op();
-                opq.push_front({fpu_op});
+                opq.push_front({op});
             end
         join
 

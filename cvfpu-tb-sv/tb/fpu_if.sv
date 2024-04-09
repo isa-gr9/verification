@@ -21,78 +21,82 @@
 import fpnew_pkg::*;
 import cf_math_pkg::*;
 
-interface fpu_if #();
+interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
+    parameter type                            TagType        = logic;
 
     /* INTERFACE SIGNALS */
-    logic                               clk,
-    logic                               rst,
-    logic [NUM_OPERANDS-1:0][WIDTH-1:0] operands,
-    fpnew_pkg::roundmode_e              rnd_mode,
-    fpnew_pkg::operation_e              op,
-    logic                               op_mod,
-    fpnew_pkg::fp_format_e              src_fmt,
-    fpnew_pkg::fp_format_e              dst_fmt,
-    fpnew_pkg::int_format_e             int_fmt,
-    logic                               vectorial_op,
-    TagType                             tag,
-    logic                               in_valid,
-    logic                               in_ready,
-    logic                               flush,
-    logic [WIDTH-1:0]                   result,
-    fpnew_pkg::status_t                 status,
-    TagType                             tag,
-    logic                               out_valid,
-    logic                               out_ready,
-    logic                               busy
+    logic                               clk;
+    logic                               rst;
+    logic [NUM_OPERANDS-1:0][WIDTH-1:0] operands;
+    fpnew_pkg::roundmode_e              rnd_mode;
+    fpnew_pkg::operation_e              op;
+    logic                               op_mod;
+    fpnew_pkg::fp_format_e              src_fmt;
+    fpnew_pkg::fp_format_e              dst_fmt;
+    fpnew_pkg::int_format_e             int_fmt;
+    logic                               vectorial_op;
+    TagType                             tag_i;
+    logic                               in_valid;
+    logic                               in_ready;
+    logic                               flush;
+    logic [WIDTH-1:0]                   result;
+    fpnew_pkg::status_t                 status;
+    TagType                             tag_o;
+    logic                               out_valid;
+    logic                               out_ready;
+    logic                               busy;
+    logic [WIDTH-1:0]                   result_exp;
 
     /* INTERFACE SIGNALS MODE MAPPING */
 
-    /* Interface port at ALU side (DUT) */
+    /* Interface port at mul side (DUT) */
     modport fpu_port (
-        input logic                               clk,
-        input logic                               rst,
-        input logic [NUM_OPERANDS-1:0][WIDTH-1:0] operands,
-        input fpnew_pkg::roundmode_e              rnd_mode,
-        input fpnew_pkg::operation_e              op,
-        input logic                               op_mod,
-        input fpnew_pkg::fp_format_e              src_fmt,
-        input fpnew_pkg::fp_format_e              dst_fmt,
-        input fpnew_pkg::int_format_e             int_fmt,
-        input logic                               vectorial_op,
-        input TagType                             tag,
-        input logic                               in_valid,
-        output logic                               in_ready,
-        input logic                               flush,
-        output logic [WIDTH-1:0]                  result,
-        output fpnew_pkg::status_t                status,
-        output TagType                            tag,
-        output logic                              out_valid,
-        input  logic                              out_ready,
-        output logic                              busy   
+        input                               clk,
+        input                               rst,
+        input                               operands,
+        input                               rnd_mode,
+        input                               op,
+        input                               op_mod,
+        input                               src_fmt,
+        input                               dst_fmt,
+        input                               int_fmt,
+        input                               vectorial_op,
+        input                               tag_i,
+        input                               in_valid,
+        output                              in_ready,
+        input                               flush,
+        output                              result,
+        output                              status,
+        output                              tag_o,
+        output                              out_valid,
+        input                               out_ready,
+        output                              busy,
+        input                               result_exp   
     );
 
     /* Interface port at driver side (unused since the driver is a class) */
     modport driver_port (
-        output logic                               clk,
-        output logic                               rst,
-        output logic [NUM_OPERANDS-1:0][WIDTH-1:0] operands,
-        output fpnew_pkg::roundmode_e              rnd_mode,
-        output fpnew_pkg::operation_e              op,
-        output logic                               op_mod,
-        output fpnew_pkg::fp_format_e              src_fmt,
-        output fpnew_pkg::fp_format_e              dst_fmt,
-        output fpnew_pkg::int_format_e             int_fmt,
-        output logic                               vectorial_op,
-        output TagType                             tag,
-        output logic                               in_valid,
-        input logic                                in_ready_
-        output logic                               flush,
-        input logic [WIDTH-1:0]                    result,
-        input fpnew_pkg::status_t                  status,
-        input TagType                              tag,
-        input logic                                out_valid,
-        output logic                               out_ready,
-        input logic                                busy  
+        output                                  clk,
+        output                                  rst,
+        output                                  operands,
+        output                                  rnd_mode,
+        output                                  op,
+        output                                  op_mod,
+        output                                  src_fmt,
+        output                                  dst_fmt,
+        output                                  int_fmt,
+        output                                  vectorial_op,
+        output                                  tag_i,
+        output                                  in_valid,
+        input                                   in_ready,
+        output                                  flush,
+        input                                   result,
+        input                                   status,
+        input                                   tag_o,
+        input                                   out_valid,
+        output                                  out_ready,
+        input                                   busy,  
+        output                                  result_exp
     );
 
     /*
@@ -107,21 +111,21 @@ interface fpu_if #();
 
     // Initialize clock and reset
     initial begin: init
-        clk_i    = 1'b1;
-        rst_ni   = 1'b1;
+        clk    = 1'b1;
+        rst   = 1'b1;
     end
 
     // Generate clock
     always #5ns begin: clk_gen
-        clk_i= ~clk_i
+        clk= ~clk;
     end
 
     // Reset the DUT
     task rst_dut();
-        @(negedge clk_i;
-        rst_ni   = 1'b0;
-        @(negedge clk_i;
-        rst_ni   = 1'b1;
+        @(negedge clk)
+        rst   = 1'b0;
+        @(negedge clk)
+        rst   = 1'b1;
     endtask // rst_dut
 
     // ----------

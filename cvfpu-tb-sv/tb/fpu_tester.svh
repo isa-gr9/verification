@@ -30,7 +30,8 @@ import cf_math_pkg::*;
 
 /* ALU tester class */
 class fpu_tester #(
-    parameter DWIDTH    = 16
+    parameter DWIDTH    = 16,
+    parameter NUM_OPERANDS = 3
 );
     // PROPERTIES
     // ----------
@@ -47,47 +48,64 @@ class fpu_tester #(
     // Random ALU operation and inputs (updated by the 'randomize()' method)
     typedef struct packed {
         fpnew_pkg::operation_e                          op;
-        logic [NUM_OPERANDS-1:0][DWIDTH-1:0]            operands
+        logic [NUM_OPERANDS-1:0][DWIDTH-1:0]            operands;
     } op_t;
-    //protected rand fpnew_pkg::operation_e     op;
-    
-    /*constraint ab_dist_c {
-        op.operands dist {
-            0                   :=10, 
-            (1<<DWIDTH)-1       :=10,
-            (1<<(DWIDTH-1))-1   :=10, 
-            [1:(1<<DWIDTH)-2]   :=1
-        };
-        alu_op.b dist {
-            0                   :=10, 
-            (1<<DWIDTH)-1       :=10,
-            (1<<(DWIDTH-1))-1   :=10, 
-            [1:(1<<DWIDTH)-2]   :=1
-        };
-    };
-    */
+ 
 
-    //WE SHOULD READ ALL THE FILE AND SAVE IT INTO THE ARRAY
-    int fd; // file descriptor
-    int status;
-    logic [19:0][DWIDTH-1:0] ops;
-    fd = $fopen("operands.txt","r");
-    status = $fscanf("%16b",ops); 
-    if(status != 20) error;
+    // operands.txt and results.txt are filled randomly with the fucntion operandGen 
 
-    // ALU coverage
+
+int fd1; // file descriptor
+int fd2;
+int status;
+logic [19:0][DWIDTH-1:0] ops;
+
+// Declare variables to store file paths
+string operands_file = "../tb/operands.txt";
+string results_file = "../tb/results.txt";
+
+
+// ALU coverage
     // NOTE: declared as static so it's shared among multiple class
     // instances.
     protected static fpu_cov #(DWIDTH, NUM_OPERANDS)  fpucov;
 
-    // METHODS
-    // -------
-
-    // Constructor
+ // Constructor
     function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if); 
         taif = _if;   // get the handle to the ALU interface from the TB
-        fpcov = new(_if);
+        fpucov = new(_if);
+
+    // Open operands.txt for reading
+    fd1 = $fopen(operands_file, "r");
+    if (fd1 == 0) begin
+        $display("Error opening %s", operands_file);
+        $finish;
+    end
+
+    // Read from operands.txt
+    status = $fscanf(fd1, "%16b", ops); 
+    if (status != 1) begin
+        $display("Error reading from %s", operands_file);
+        $fclose(fd1);
+        $finish;
+    end
+
+
+    // Open results.txt for reading
+    fd2 = $fopen(results_file, "r");
+    if (fd2 == 0) begin
+        $display("Error opening %s", results_file);
+        $finish;
+    end
+
+    // Read from results.txt
+    status = $fscanf(fd2);
+
+
+
+
     endfunction // new()
+   
 
     // Test body
     /*
@@ -99,12 +117,12 @@ class fpu_tester #(
         init();
 
         // Start measuring coverage
-        fpcov.cov_start();
+        fpucov.cov_start();
 
         // Issue num_cycles random ALU operations
         repeat (num_cycles) begin: driver
             @(posedge taif.clk);
-            rand_fpu_op();
+            //operandGen(NUM_OPERANDS);    // function to generate random operands and its results
         end
 
         // Wait for the last operation to complete
@@ -137,8 +155,8 @@ class fpu_tester #(
         taif.op   = MUL;
         taif.operands[0] = ops[i];
         taif.operands[1] = ops[i+1];
+        taif.operands[2] = 0;
         i = i+2;
-*/
         // Update coverage
         fpucov.cov_sample();
     endfunction

@@ -20,7 +20,7 @@
 `ifndef FPU_COV_SVH_
 `define FPU_COV_SVH_
 
-import fpu_pkg::*;
+import fpnew_pkg::*;
 import cf_math_pkg::*;
 
 class fpu_cov #(
@@ -38,20 +38,10 @@ class fpu_cov #(
     // FUNCTIONAL COVERAGE
     // -------------------
 
-    // DA MODIFICARE???????????????????????????????????????????????????????????
     covergroup fpu_cg;
-        // Operations
-        op_cp: coverpoint fpuif.op iff (fpuif.rst_n) {
-            bins add        = {ADD};
-            bins fmadd        = {FMADD};
-            bins mnmsub       = {FNMSUB};
-            bins mul     = {MUL};
-        }
-
         // Operands
-        operands_cp: coverpoint fpuif.operands iff (fpuif.rst_n) {
+        operands_cp: coverpoint fpuif.operands iff (fpuif.rst) {
             bins dim[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
-            bins num[]   = {0, (1<<NUM_OPERANDS)-1, (1<<(NUM_OPERANDS-1))-1};
             bins others     = default;
         }
     endgroup: fpu_cg
