@@ -22,7 +22,7 @@ import fpnew_pkg::*;
 import cf_math_pkg::*;
 
 interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
-    parameter type                            TagType = logic;
+    parameter type                            TagType        = logic;
 
     /* INTERFACE SIGNALS */
     logic                               clk;
@@ -45,9 +45,7 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
     logic                               out_valid;
     logic                               out_ready;
     logic                               busy;
-    shortreal                           op_realA;
-    shortreal                           op_realB;
-
+    logic [WIDTH-1:0]                   result_exp;
 
     /* INTERFACE SIGNALS MODE MAPPING */
 
@@ -73,8 +71,7 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
         output                              out_valid,
         input                               out_ready,
         output                              busy,
-        input                               op_realA,
-        input                               op_realB
+        input                               result_exp   
     );
 
     /* Interface port at driver side (unused since the driver is a class) */
@@ -98,9 +95,8 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
         input                                   tag_o,
         input                                   out_valid,
         output                                  out_ready,
-        input                                   busy,
-        output                                  op_realA,
-        output                                  op_realB
+        input                                   busy,  
+        output                                  result_exp
     );
 
     /*
@@ -111,8 +107,6 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
      */
 
     /******************************************************************************/
-
-
     /* CLOCK GENERATION */
 
     // Initialize clock and reset
@@ -138,7 +132,6 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
     // ASSERTIONS
     // ----------
     `ifndef SYNTHESIS
-    `include "prova.sv"
     `include "fpu_if_sva.svh"
     `endif /* SYNTHESIS */
 

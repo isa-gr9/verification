@@ -30,7 +30,7 @@ import cf_math_pkg::*;
 
 /* ALU tester class */
 class fpu_tester #(
-    //parameter DWIDTH    = 16,
+    parameter DWIDTH    = 16,
     parameter NUM_OPERANDS = 3
 );
     // PROPERTIES
@@ -43,23 +43,86 @@ class fpu_tester #(
      * handle to a proper interface object is passed to the 
      * constructor (see below) by the TB in 'alu_tb.sv'.
      */
-    virtual interface fpu_if #(/*DWIDTH,*/ NUM_OPERANDS) taif;
+    virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) taif;
 
     // Random ALU operation and inputs (updated by the 'randomize()' method)
-    protected rand shortreal [NUM_OPERANDS-1:0]       operands;
+    typedef struct packed {
+        fpnew_pkg::operation_e                          op;
+        logic [NUM_OPERANDS-1:0][DWIDTH-1:0]            operands;
+    } op_t;
+ 
 
+    // operands.txt and results.txt are filled randomly with the fucntion operandGen 
+
+
+int fd1; // file descriptor
+int fd2;
+int status_o;
+int status_r;
+logic [19:0][DWIDTH-1:0] ops;
+logic [DWIDTH-1:0] result;
+
+// Declare variables to store file paths
+string operands_file = "../tb/operands.txt";
+string results_file = "../tb/results.txt";
 
 
 // ALU coverage
     // NOTE: declared as static so it's shared among multiple class
     // instances.
-    protected static fpu_cov #(/*DWIDTH,*/ NUM_OPERANDS)  fpucov;
+    protected static fpu_cov #(DWIDTH, NUM_OPERANDS)  fpucov;
 
  // Constructor
-    function new(virtual interface fpu_if #(/*DWIDTH,*/ NUM_OPERANDS) _if); 
+    function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if); 
         taif = _if;   // get the handle to the ALU interface from the TB
         fpucov = new(_if);
-    endfunction
+
+    // Open operands.txt for reading
+    fd1 = $fopen(operands_file, "r");
+    if (fd1 == 0) begin
+        $display("Error opening %s", operands_file);
+        $finish;
+    end
+
+begin
+    // Read from operands.txt
+    int j;
+    for (j = 0; j < 20; j++) begin
+    int status_o;
+    status_o = $fscanf(fd1, "%b", ops[j]);
+    if (status_o != 1) begin
+        $display("Error reading from %s", operands_file);
+        $fclose(fd1);
+        $finish;
+        end
+    end
+end
+
+
+    // Open results.txt for reading
+    fd2 = $fopen(results_file, "r");
+    if (fd2 == 0) begin
+        $display("Error opening %s", results_file);
+        $finish;
+    end
+
+begin
+    // Read from results.txt
+    int k;
+    for (k=0; k<10; k++) begin
+    status_r = $fscanf(fd2, "%b", result[k]);
+    if (status_r != 1) begin
+        $display("Error reading from %s", results_file);
+        $fclose(fd2);
+        $finish;
+        end
+    end
+
+end
+
+
+
+    endfunction // new()
    
 
     // Test body
@@ -77,11 +140,12 @@ class fpu_tester #(
         // Issue num_cycles random ALU operations
         repeat (num_cycles) begin: driver
             @(posedge taif.clk);
+            //operandGen(NUM_OPERANDS);    // function to generate random operands and its results
             rand_fpu_op();
         end
 
         // Wait for the last operation to complete
-        @(posedge taif.clk);
+        //@(posedge taif.clk);
 
         // Stop measuring coverage
         fpucov.cov_stop();
@@ -89,8 +153,7 @@ class fpu_tester #(
 
     protected task init();
         // Reset driver signals
-        taif.operands[0] = 16'b0;
-        taif.operands[1] = 16'b0;
+        taif.operands      = 3'b0;
         taif.op     = MUL;
 
         // Reset the DUT
@@ -100,24 +163,22 @@ class fpu_tester #(
     endtask: init
     
 
+    int i = 0;
+    int k = 0;
     // Prepare a new ALU operation
     function void rand_fpu_op();
-        // Obtain random operations and operands
-        assert (operands[0].randomize())   // check the method's return value
-        assert (operands[1].randomize())
+        /* Obtain random operations and operands
+        assert (this.randomize())   // check the method's return value
         else   $error("ERROR while calling 'randomize()' method");*/
-        logic [DWIDTH-1:0] opA;
-        logic [DWIDTH-1:0] opB;
+
         // Set the ALU interface signals
         taif.op   = MUL;
-        interf_handle.f2ieee754(operands[0], opA);
-        interf_handle.f2ieee754(operands[1], opB);
-        taif.operands[0] = opA;
-        taif.operands[1] = opB;
-        taif.operands[2] = 16'b0; // c is not used
-        taif.op_realA = operands[0];
-        taif.op_realB = operands[1]; 
-
+        taif.operands[0] = ops[i];
+        taif.operands[1] = ops[i+1];
+        taif.operands[2] = 0;
+        taif.result_exp = result[k];
+        k = k+1;
+        i = i+2;
         // Update coverage
         fpucov.cov_sample();
     endfunction

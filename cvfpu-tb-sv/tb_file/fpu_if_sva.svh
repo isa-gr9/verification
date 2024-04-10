@@ -51,10 +51,8 @@ fpu_reset: assert property (p_reset);
 
 
 property p_result;
-    shortreal res;
     @(negedge clk) disable iff (!rst)
-        f2ieee754(op_realA * op_realB, res);
-        result == res; 
+        result == result_exp;
 endproperty
 
 fpu_result: assert property (p_result) 

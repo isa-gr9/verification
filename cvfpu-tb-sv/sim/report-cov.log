@@ -14,6 +14,6 @@ Covergroup                                             Metric       Goal       B
         bin dim[0]                                          0          1          -    ZERO                 
         bin dim[32767]                                      0          1          -    ZERO                 
         bin dim[65535]                                      0          1          -    ZERO                 
-        default bin others                                  0                     -    ZERO                 
+        default bin others                               1000                     -    Occurred             
 
 TOTAL COVERGROUP COVERAGE: 0.00%  COVERGROUP TYPES: 1

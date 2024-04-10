@@ -40,12 +40,8 @@ class fpu_cov #(
 
     covergroup fpu_cg;
         // Operands
-        operand0_cp: coverpoint fpuif.operands[0] iff (fpuif.rst) {
-            bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
-            bins others     = default;
-        }
-        operand1_cp: coverpoint fpuif.operands[1] iff (fpuif.rst) {
-            bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
+        operands_cp: coverpoint fpuif.operands iff (fpuif.rst) {
+            bins dim[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
             bins others     = default;
         }
     endgroup: fpu_cg

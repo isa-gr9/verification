@@ -9,6 +9,7 @@
 ../src/fpnew_opgroup_fmt_slice.sv
 ../src/fpnew_opgroup_block.sv
 ../src/fpnew_top.sv
+../tb/prova.sv
 ../tb/fpu_if.sv
 ../tb/fpu_tb.sv
 ../tb/fpu_wrap.sv
