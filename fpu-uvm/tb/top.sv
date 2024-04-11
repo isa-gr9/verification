@@ -20,11 +20,24 @@ import uvm_pkg::*;
 
 //Top
 module top;
-
+  logic clk;
+  logic rst;
   
-
+  initial begin
+    clk = 0;
+    rst = 1;
+    #22 rst = 0;
+    
+  end
   
-  DUT sum(in, out, state);
+  always #5 clk = !clk;
+  
+  logic [1:0] state;
+  
+  dut_if in(clk, rst);
+  dut_if out(clk, rst);
+  
+  DUT fpu(in, out, state);
 
   initial begin
     `ifdef INCA

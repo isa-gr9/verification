@@ -5,8 +5,6 @@ class driver extends uvm_driver #(packet_in);
     input_vif vif;
     event begin_record, end_record;
 
-    import "DPI-C" function void fp2ieee754(shortreal f, logic [15:0] ieee754);
-
     function new(string name = "driver", uvm_component parent = null);
         super.new(name, parent);
     endfunction
@@ -48,9 +46,6 @@ class driver extends uvm_driver #(packet_in);
     endtask
 
     virtual protected task drive_transfer(packet_in tr);
-
-        /*Qui bisogna usare la funzione C per convertire i float in logic */
-
         vif.A = tr.A;
         vif.B = tr.B;
         vif.valid = 1;

@@ -46,7 +46,7 @@ module top;
   dut_if in(clk, rst);
   dut_if out(clk, rst);
   
-  DUT sum(in, out, state);
+  DUT mul(in, out, state);
 
   initial begin
     `ifdef INCA

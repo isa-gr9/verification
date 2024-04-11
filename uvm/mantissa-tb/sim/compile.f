@@ -7,6 +7,9 @@
 ../src/LUT.sv
 ../src/daddatree.sv
 ../src/multiplier.sv
+../src/dut_if.sv
+../src/DUT.sv
+
 
 ../tb/mul_if.sv
 ../tb/mul_wrap.sv
