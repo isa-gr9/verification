@@ -24,18 +24,18 @@ class driver extends uvm_driver #(packet_in);
     endtask
 
     virtual protected task reset_signals();
-        wait (vif.rst === 1);
+        wait (vif.rst_ni === 1);
         forever begin
             vif.valid <= '0;
             vif.A <= 'x;
             vif.B <= 'x;
-            @(posedge vif.rst);
+            @(posedge vif.rst_ni);
         end
     endtask
 
     virtual protected task get_and_drive(uvm_phase phase);
-        wait(vif.rst === 1);
-        @(negedge vif.rst);
+        wait(vif.rst_ni === 1);
+        @(negedge vif.rst_ni);
         @(posedge vif.clk);
         
         forever begin

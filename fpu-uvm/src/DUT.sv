@@ -1,25 +1,25 @@
-import fpnew_pkg:*;
+import fpnew_pkg::*;
 
-module DUT#(
+module DUT /*#(
     parameter fpnew_pkg::fpu_features_t       Features       = fpnew_pkg::RV16F,		   
     parameter fpnew_pkg::fpu_implementation_t Implementation = fpnew_pkg::ISA_PIPE,
     parameter type                            TagType        = logic,
   // Do not change
     localparam int unsigned WIDTH        = Features.Width,
     localparam int unsigned NUM_OPERANDS = 3
-)(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic [1:0] {INITIAL,WAIT,SEND} state);
+)*/(dut_if.port_in in_inter, dut_if.port_out out_inter, output enum logic [1:0] {INITIAL,WAIT,SEND} state);
     
     //adder adder_under_test(.A(in_inter.A),.B(in_inter.B),.OUT(out_inter.data));
 
 
 
-       fpnew_top #(Features, 
-                   Implementation
-                   TagType
-                   Width
-                   NUM_operands) DUT_top(
+       fpnew_top /*#(Features, 
+                   Implementation,
+                   TagType,
+                   WIDTH,
+                   NUM_OPERANDS)*/ DUT_top(
             .clk_i          (in_inter.clk),
-            .rst_ni         (in_inter.rst),
+            .rst_ni         (in_inter.rst_ni),
 		    .operands_i     (in_inter.operands_i),
 		    .rnd_mode_i     (in_inter.rnd_mode_i),
 		    .op_i           (in_inter.op_i),
@@ -42,7 +42,7 @@ module DUT#(
 
     always_ff @(posedge in_inter.clk)
     begin
-        if(in_inter.rst) begin
+        if(in_inter.rst_ni) begin
             in_inter.ready <= 0;
             //out_inter.data <= 'x;
             out_inter.valid <= 0;
@@ -58,8 +58,8 @@ module DUT#(
                     if(in_inter.valid) begin
                         in_inter.ready <= 0;
                         //out_inter.data <= in_inter.A + in_inter.B;
-                        $display("adder: input A = %d, input B = %d, output OUT = %d",in_inter.A,in_inter.B,out_inter.data);
-                        $display("adder: input A = %b, input B = %b, output OUT = %b",in_inter.A,in_inter.B,out_inter.data);
+                        $display("adder: input A = %d, input B = %d, output OUT = %d",in_inter.A,in_inter.B,out_inter.result_o);
+                        $display("adder: input A = %b, input B = %b, output OUT = %b",in_inter.A,in_inter.B,out_inter.result_o);
                         out_inter.valid <= 1;
                         state <= SEND;
                     end

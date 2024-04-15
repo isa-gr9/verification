@@ -21,4 +21,6 @@ class agent_out extends uvm_agent;
         super.connect_phase(phase);
         mon.item_collected_port.connect(item_collected_port);
     endfunction
+
+
 endclass: agent_out

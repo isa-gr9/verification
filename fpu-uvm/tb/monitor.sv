@@ -25,8 +25,8 @@ class monitor extends uvm_monitor;
     endtask
 
     virtual task collect_transactions(uvm_phase phase);
-        wait(vif.rst === 1);
-        @(negedge vif.rst);
+        wait(vif.rst_ni === 1);
+        @(negedge vif.rst_ni);
         
         forever begin
             do begin

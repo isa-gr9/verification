@@ -2,8 +2,8 @@ interface dut_if(input clk, rst);
     logic valid, ready;
     
 
-    import fpunew_pkg::*;
-
+    import fpnew_pkg::*;
+    parameter type TagType              = logic;
     parameter int unsigned NUM_OPERANDS = 2;
     parameter int unsigned WIDTH        = 16;
 
@@ -49,7 +49,7 @@ interface dut_if(input clk, rst);
     assign in_valid_i       = rst;      //always valid together with the rst
     assign operands_i[0]    = A;
     assign operands_i[1]    = B;
-    assign rst_ni           = ~rst;
+    //assign rst_ni           = ~rst;
 
     initial begin: init
         clk_i  = 1'b0;
@@ -63,6 +63,8 @@ interface dut_if(input clk, rst);
 
 
     modport port_in (
+        input       A,
+        input       B,
         input       clk,
         input       rst_ni,
         input       operands_i,
@@ -84,8 +86,7 @@ interface dut_if(input clk, rst);
 
     modport port_out (
         input       clk,
-        input       rst,
-        output      out_valid_o,
+        input       rst_ni,
         output      in_ready_o,
         output      result_o,
         output      status_o,

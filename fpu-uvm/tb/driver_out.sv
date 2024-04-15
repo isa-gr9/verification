@@ -22,16 +22,16 @@ class driver_out extends uvm_driver #(packet_out);
     endtask
 
     virtual protected task reset_signals();
-        wait (vif.rst === 1);
+        wait (vif.rst_ni === 1);
         forever begin
             vif.ready <= '0;
-            @(posedge vif.rst);
+            @(posedge vif.rst_ni);
         end
     endtask
 
     virtual protected task drive(uvm_phase phase);
-        wait(vif.rst === 1);
-        @(negedge vif.rst);
+        wait(vif.rst_ni === 1);
+        @(negedge vif.rst_ni);
         forever begin
             @(posedge vif.clk);
             vif.ready <= 1;
