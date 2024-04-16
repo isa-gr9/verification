@@ -1,17 +1,3 @@
-// Copyright 2022 Politecnico di Torino.
-// Copyright and related rights are licensed under the Solderpad Hardware
-// License, Version 2.0 (the "License"); you may not use this file except in
-// compliance with the License. You may obtain a copy of the License at
-// http://solderpad.org/licenses/SHL-2.0. Unless required by applicable law
-// or agreed to in writing, software, hardware and materials distributed under
-// this License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
-//
-// File: mul_verbose_tester.svh
-// Author: Michele Caon
-// Date: 02/06/2022
-
 // File: mul_verbose_tester.svh
 // ----------------------------
 // Class extended from alu_tester.svh to print additional information about
@@ -22,10 +8,10 @@
 
 `include "mul_tester.svh"
 
-/* ALU verbose tester class */
+/* MUL verbose tester class */
 class mul_verbose_tester #(
     parameter DWIDTH    = 11
-) extends mul_tester #(DWIDTH);    // inherits methods and variables from alu_tester
+) extends mul_tester #(DWIDTH);    // inherits methods and variables from mul_tester
 
     // Operands queue
     op_t    opq[$];
@@ -47,7 +33,7 @@ class mul_verbose_tester #(
       fork
          // Monitor operations
          print_op();
-          // Issue num_cycles random ALU operations
+          // Issue num_cycles random multiplications
           repeat (num_cycles) begin: driver
               @(posedge taif.clk);
               rand_mul_op();
