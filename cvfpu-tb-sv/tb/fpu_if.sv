@@ -1,17 +1,3 @@
-// Copyright 2022 Politecnico di Torino.
-// Copyright and related rights are licensed under the Solderpad Hardware
-// License, Version 2.0 (the "License"); you may not use this file except in
-// compliance with the License. You may obtain a copy of the License at
-// http://solderpad.org/licenses/SHL-2.0. Unless required by applicable law
-// or agreed to in writing, software, hardware and materials distributed under
-// this License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
-//
-// File: fpu_if.sv
-// Author: Michele Caon
-// Date: 31/05/2022
-
 /*
  * File: fpu_if.sv
  * ----------------------------------------
@@ -21,8 +7,13 @@
 import fpnew_pkg::*;
 import cf_math_pkg::*;
 
-interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
-    parameter type                            TagType = logic;
+interface fpu_if #(
+    parameter fpnew_pkg::fpu_features_t       Features       = fpnew_pkg::RV16F,
+    parameter fpnew_pkg::fpu_implementation_t Implementation = fpnew_pkg::ISA_PIPE,
+    parameter type                            TagType        = logic,
+    parameter WIDTH        = 16,
+    parameter NUM_OPERANDS = 3
+);
 
     /* INTERFACE SIGNALS */
     logic                               clk;
@@ -35,23 +26,23 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
     fpnew_pkg::fp_format_e              dst_fmt;
     fpnew_pkg::int_format_e             int_fmt;
     logic                               vectorial_op;
-    TagType                             tag_i;
+    logic                             tag_i;
     logic                               in_valid;
     logic                               in_ready;
     logic                               flush;
-    logic [WIDTH-1:0]                   result;
+    logic [WIDTH-1:0]                  result;
     fpnew_pkg::status_t                 status;
-    TagType                             tag_o;
+    logic                            tag_o;
     logic                               out_valid;
     logic                               out_ready;
     logic                               busy;
-    shortreal                           op_realA;
-    shortreal                           op_realB;
+    logic [WIDTH-1:0]                  expected_res;
+
 
 
     /* INTERFACE SIGNALS MODE MAPPING */
 
-    /* Interface port at mul side (DUT) */
+    /* Interface port at fpu side (DUT) */
     modport fpu_port (
         input                               clk,
         input                               rst,
@@ -72,9 +63,7 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
         output                              tag_o,
         output                              out_valid,
         input                               out_ready,
-        output                              busy,
-        input                               op_realA,
-        input                               op_realB
+        output                              busy
     );
 
     /* Interface port at driver side (unused since the driver is a class) */
@@ -98,47 +87,54 @@ interface fpu_if #(parameter NUM_OPERANDS = 3, WIDTH = 16);
         input                                   tag_o,
         input                                   out_valid,
         output                                  out_ready,
-        input                                   busy,
-        output                                  op_realA,
-        output                                  op_realB
+        input                                   busy
     );
 
-    /*
-     * NOTE: an interface can be used to abstract the communication
-     * with a module and to implement self-checking functions. In 
-     * this case, we use it to generate the clock for the sequential
-     * ALU and to check that the result is consistent with the input.
-     */
 
-    /******************************************************************************/
+   assign rnd_mode = fpnew_pkg::RNE;
+   assign op = fpnew_pkg::MUL;
+   assign src_fmt = fpnew_pkg::FP16;
+   assign dst_fmt = fpnew_pkg::FP16;
+   assign int_fmt = fpnew_pkg::INT16;   
+   assign vectorial_op = 0;
+   assign tag_i = 0;
+   assign flush = 0;
+   assign op_mod = 0;
+   assign out_ready = out_valid;
 
 
-    /* CLOCK GENERATION */
 
-    // Initialize clock and reset
-    initial begin: init
-        clk    = 1'b1;
-        rst   = 1'b1;
+    // Constants
+     time Ts = 10ns;
+     time Tp = 2ns;
+
+
+
+    // Clock generation process
+    always begin : clk_process
+        if (clk === 1'bx) begin
+            clk <= 1'b0;
+        end else begin
+            clk <= ~clk;
+        end
+        #(Ts/2);
     end
 
-    // Generate clock
-    always #5ns begin: clk_gen
-        clk= ~clk;
-    end
-
-    // Reset the DUT
+   // Task for generating reset
     task rst_dut();
-        @(negedge clk)
-        rst   = 1'b0;
-        @(negedge clk)
-        rst   = 1'b1;
-    endtask // rst_dut
+        rst = 1'b1;
+        #Tp;
+        rst = 1'b0;
+        #(2 * Ts);
+        rst = 1'b1;
+        // Infinite loop to keep simulation running
+        @(posedge clk);
+    endtask
 
     // ----------
     // ASSERTIONS
     // ----------
     `ifndef SYNTHESIS
-    `include "prova.sv"
     `include "fpu_if_sva.svh"
     `endif /* SYNTHESIS */
 

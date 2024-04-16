@@ -4,16 +4,22 @@ Covergroup                                             Metric       Goal       B
                                                                                                          
 ----------------------------------------------------------------------------------------------------------
  TYPE /fpu_tb_sv_unit/fpu_cov/fpu_cov__1/fpu_cg         0.00%        100          -    ZERO                 
-    covered/total bins:                                     0          3          -                      
-    missing/total bins:                                     3          3          -                      
+    covered/total bins:                                     0          4          -                      
+    missing/total bins:                                     4          4          -                      
     % Hit:                                              0.00%        100          -                      
-    Coverpoint operands_cp                              0.00%        100          -    ZERO                 
-        covered/total bins:                                 0          3          -                      
-        missing/total bins:                                 3          3          -                      
+    Coverpoint a_cp                                     0.00%        100          -    ZERO                 
+        covered/total bins:                                 0          2          -                      
+        missing/total bins:                                 2          2          -                      
         % Hit:                                          0.00%        100          -                      
-        bin dim[0]                                          0          1          -    ZERO                 
-        bin dim[32767]                                      0          1          -    ZERO                 
-        bin dim[65535]                                      0          1          -    ZERO                 
+        bin corner[0]                                       0          1          -    ZERO                 
+        bin corner[65535]                                   0          1          -    ZERO                 
+        default bin others                               1000                     -    Occurred             
+    Coverpoint b_cp                                     0.00%        100          -    ZERO                 
+        covered/total bins:                                 0          2          -                      
+        missing/total bins:                                 2          2          -                      
+        % Hit:                                          0.00%        100          -                      
+        bin corner[0]                                       0          1          -    ZERO                 
+        bin corner[65535]                                   0          1          -    ZERO                 
         default bin others                               1000                     -    Occurred             
 
 TOTAL COVERGROUP COVERAGE: 0.00%  COVERGROUP TYPES: 1

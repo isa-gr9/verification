@@ -1,21 +1,7 @@
-// Copyright 2022 Politecnico di Torino.
-// Copyright and related rights are licensed under the Solderpad Hardware
-// License, Version 2.0 (the "License"); you may not use this file except in
-// compliance with the License. You may obtain a copy of the License at
-// http://solderpad.org/licenses/SHL-2.0. Unless required by applicable law
-// or agreed to in writing, software, hardware and materials distributed under
-// this License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-// CONDITIONS OF ANY KIND, either express or implied. See the License for the
-// specific language governing permissions and limitations under the License.
-//
-// File: alu_cov.svh
-// Author: Michele Caon
-// Date: 06/06/2022
-
-// File: alu_cov.svh
+// File: fpu_cov.svh
 // ----------------------------------------
 // Classes containig the methods and covergroup to compute the functional
-// coverage of the ALU.
+// coverage of the FPU.
 
 `ifndef FPU_COV_SVH_
 `define FPU_COV_SVH_
@@ -24,30 +10,32 @@ import fpnew_pkg::*;
 import cf_math_pkg::*;
 
 class fpu_cov #(
-    parameter DWIDTH = 16,
+    parameter WIDTH        = 16,
     parameter NUM_OPERANDS = 3
 );
     // ---------
     // VARIABLES
     // ---------
     
-    // Adder interface
-    local virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) fpuif;
+    // fpu interface
+    local virtual interface fpu_if #(WIDTH, NUM_OPERANDS) fpuif;
     
     // -------------------
     // FUNCTIONAL COVERAGE
     // -------------------
 
     covergroup fpu_cg;
-        // Operands
-        operand0_cp: coverpoint fpuif.operands[0] iff (fpuif.rst) {
-            bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
-            bins others     = default;
-        }
-        operand1_cp: coverpoint fpuif.operands[1] iff (fpuif.rst) {
-            bins corner[]   = {0, (1<<DWIDTH)-1, (1<<(DWIDTH-1))-1};
-            bins others     = default;
-        }
+    // Operands
+    a_cp: coverpoint fpuif.operands[0] iff (fpuif.rst) {
+        bins corner[] = {16'b0, {16{1'b1}}, {16{1'b0}}};
+        bins others = default;
+    }
+
+    b_cp: coverpoint fpuif.operands[1] iff (fpuif.rst) {
+        bins corner[] = {16'b0, {16{1'b1}}, {16{1'b0}}};
+        bins others = default;
+    }
+
     endgroup: fpu_cg
 
     // -------
@@ -55,7 +43,7 @@ class fpu_cov #(
     // -------
 
     // Constructor
-    function new(virtual interface fpu_if #(DWIDTH, NUM_OPERANDS) _if);
+    function new(virtual interface fpu_if #(WIDTH, NUM_OPERANDS) _if);
         fpuif         = _if;
         fpu_cg      = new();
 
@@ -83,6 +71,6 @@ class fpu_cov #(
         return fpu_cg.get_inst_coverage();
     endfunction: get_cov
     
-endclass // alu_cov
+endclass // fpu_cov
 
 `endif /* FPU_COV_SVH_ */
