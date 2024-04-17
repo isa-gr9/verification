@@ -86,8 +86,7 @@ constraint constraint_randx {
 		end
 
         // Wait for the last operation to complete
-        //@(posedge taif.clk);
-        wait_for_ready(); // Wait for ready signal to be 1
+        @(posedge taif.clk);
         // Stop measuring coverage
         fpucov.cov_stop();
     endtask // run_test()
@@ -114,9 +113,9 @@ endtask: wait_for_ready
 
     protected task init();
         // Reset driver signals
-        taif.operands[0][15:0] = 16'b0;
-        taif.operands[1][15:0] = 16'b0;
-        taif.operands[2][15:0] = 16'b0;
+        taif.operands[0] = 16'b0;
+        taif.operands[1] = 16'b0;
+        taif.operands[2] = 16'b0;
         taif.op     = MUL;
         taif.in_valid = 1'b0;
 
@@ -147,9 +146,9 @@ endtask: wait_for_ready
         f2ieee754(op2_rand, op2std);
         f2ieee754(result_real, expected_res);
         $display("expected result: %16b", expected_res);
-        taif.operands[0][15:0] = op1std;
-        taif.operands[1][15:0] = op2std;
-        taif.operands[2][15:0] = 16'b0; // c is not used
+        taif.operands[0] = op1std;
+        taif.operands[1] = op2std;
+        taif.operands[2] = 16'b0; // c is not used
         taif.expected_res = expected_res;
         taif.in_valid = 1'b1; 
 
