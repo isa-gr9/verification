@@ -25,16 +25,18 @@ class monitor_out extends uvm_monitor;
     endtask
 
     virtual task collect_transactions(uvm_phase phase);
-        wait(vif.rst === 1);
-        @(negedge vif.rst);
+        wait(vif.rst_ni === 1);
+        //@(negedge vif.rst_ni);
         
         forever begin
             do begin
-                @(posedge vif.clk);
+                //@(posedge vif.clk);
+
+                @(negedge vif.clk);
             end while (vif.valid === 0 || vif.ready === 0);
             -> begin_record;
             
-            tr.data = vif.data;
+            tr.data = vif.result_o;
             item_collected_port.write(tr);
 
             @(posedge vif.clk);

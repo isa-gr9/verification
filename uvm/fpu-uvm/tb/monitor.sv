@@ -1,9 +1,9 @@
-class monitor_out extends uvm_monitor;
-    `uvm_component_utils(monitor_out)
-    output_vif  vif;
+class monitor extends uvm_monitor;
+    input_vif  vif;
     event begin_record, end_record;
-    packet_out tr;
-    uvm_analysis_port #(packet_out) item_collected_port;
+    packet_in tr;
+    uvm_analysis_port #(packet_in) item_collected_port;
+    `uvm_component_utils(monitor)
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -12,8 +12,8 @@ class monitor_out extends uvm_monitor;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        assert(uvm_config_db#(output_vif)::get(this, "", "vif", vif));
-        tr = packet_out::type_id::create("tr", this);
+        assert(uvm_config_db#(input_vif)::get(this, "", "vif", vif));
+        tr = packet_in::type_id::create("tr", this);
     endfunction
 
     virtual task run_phase(uvm_phase phase);
@@ -26,15 +26,17 @@ class monitor_out extends uvm_monitor;
 
     virtual task collect_transactions(uvm_phase phase);
         wait(vif.rst_ni === 1);
-        @(negedge vif.rst_ni);
+        //@(negedge vif.rst_ni);
         
         forever begin
             do begin
-                @(posedge vif.clk);
+                @(negedge vif.clk);
             end while (vif.valid === 0 || vif.ready === 0);
             -> begin_record;
-            
-            tr.data = vif.result_o;
+                    `uvm_info(get_type_name(), $sformatf("A=%0b , B=%0b",vif.A, vif.B), UVM_NONE);
+
+            tr.A = vif.A;
+            tr.B = vif.B;
             item_collected_port.write(tr);
 
             @(posedge vif.clk);
@@ -45,7 +47,7 @@ class monitor_out extends uvm_monitor;
     virtual task record_tr();
         forever begin
             @(begin_record);
-            begin_tr(tr, "monitor_out");
+            begin_tr(tr, "monitor");
             @(end_record);
             end_tr(tr);
         end

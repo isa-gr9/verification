@@ -5,8 +5,6 @@ class driver extends uvm_driver #(packet_in);
     input_vif vif;
     event begin_record, end_record;
 
-    import "DPI-C" function void fp2ieee754(shortreal f, logic [15:0] ieee754);
-
     function new(string name = "driver", uvm_component parent = null);
         super.new(name, parent);
     endfunction
@@ -26,20 +24,23 @@ class driver extends uvm_driver #(packet_in);
     endtask
 
     virtual protected task reset_signals();
-        wait (vif.rst === 1);
+
+        wait (vif.rst_ni === 1);
+
         forever begin
             vif.valid <= '0;
             vif.A <= 'x;
             vif.B <= 'x;
-            @(posedge vif.rst);
+            @(posedge vif.rst_ni);
         end
     endtask
 
     virtual protected task get_and_drive(uvm_phase phase);
-        wait(vif.rst === 1);
-        @(negedge vif.rst);
+        wait(vif.rst_ni === 1);
+        //@(negedge vif.rst_ni);
         @(posedge vif.clk);
         
+            `uvm_info(get_type_name(), "reset dopo posedge", UVM_NONE)
         forever begin
             seq_item_port.get(req);
             -> begin_record;
@@ -48,8 +49,7 @@ class driver extends uvm_driver #(packet_in);
     endtask
 
     virtual protected task drive_transfer(packet_in tr);
-
-        /*Qui bisogna usare la funzione C per convertire i float in logic */
+        `uvm_info(get_type_name(), $sformatf("A=%0b , B=%0b",tr.A, tr.B), UVM_NONE);
 
         vif.A = tr.A;
         vif.B = tr.B;
@@ -57,9 +57,10 @@ class driver extends uvm_driver #(packet_in);
 
         @(posedge vif.clk)
         
-        while(!vif.ready)
+        //while(!vif.ready)
             @(posedge vif.clk);
-        
+                    `uvm_info(get_type_name(), "dopo ready", UVM_NONE)
+
         -> end_record;
         @(posedge vif.clk); //hold time
         vif.valid = 0;

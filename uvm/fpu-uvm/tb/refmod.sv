@@ -1,33 +1,38 @@
-class packet_in extends uvm_sequence_item;
-    rand int            Aint;
-    rand int            Bint;
-    shortreal           Ashort;
-    shortreal           Bshort;
-    logic [15:0]        A;
-    logic [15:0]        B;
+class refmod extends uvm_component;
+    `uvm_component_utils(refmod)
+    
+    packet_in tr_in;
+    packet_out tr_out;
+    shortreal result;
 
-
-
-    `uvm_object_utils_begin(packet_in)
-        `uvm_field_int(Aint, UVM_ALL_ON|UVM_HEX)
-        `uvm_field_int(Bint, UVM_ALL_ON|UVM_HEX)
-        `uvm_field_real(Bshort, UVM_ALL_ON|UVM_HEX)
-        `uvm_field_real(Bshort, UVM_ALL_ON|UVM_HEX)
-    `uvm_object_utils_end
-
-
-    function new(string name="packet_in");
-        super.new(name);
-    endfunction: new
-
-    // Qui randomizzare i short real e trasformarli
-
-    function void post_randomize();
-        Ashort = (shortreal'(Aint)/10.0);
-        Bshort = (shortreal'(Bint)/10.0);
-        A = ieee754(Ashort);
-        B = ieee754(Bshort);
+    uvm_get_port #(packet_in) in;
+    uvm_put_port #(packet_out) out;
+    
+    function new(string name = "refmod", uvm_component parent);
+        super.new(name, parent);
+        in = new("in", this);
+        out = new("out", this);
     endfunction
+    
+    virtual function void build_phase(uvm_phase phase);
+        super.build_phase(phase);
+        tr_out = packet_out::type_id::create("tr_out", this);
+
+    endfunction: build_phase
+    
+    virtual task run_phase(uvm_phase phase);
+        super.run_phase(phase);
+
+        forever begin
+            in.get(tr_in);
+            result = tr_in.Ashort * tr_in.Bshort;
+            tr_out.data = ieee754(result);
+
+            $display("refmod: input A = %d, input B = %d, output OUT = %d",tr_in.A, tr_in.B, tr_out.data);
+			$display("refmod: input A = %b, input B = %b, output OUT = %b",tr_in.A, tr_in.B, tr_out.data);
+            out.put(tr_out);
+        end
+    endtask: run_phase
 
 
 
@@ -60,7 +65,6 @@ class packet_in extends uvm_sequence_item;
                 i++;
             end
 
-
             exp_bias    = i-1;
             exp_int     = 15+exp_bias;
 
@@ -69,7 +73,6 @@ class packet_in extends uvm_sequence_item;
             end
 
             while (fractional_part != 0.0 && j < 11) begin
-
                 fractional_part *= 2;
 
                 if (fractional_part > 0.99 && fractional_part < 1)
@@ -110,4 +113,4 @@ class packet_in extends uvm_sequence_item;
     endfunction
 
 
-endclass: packet_in
+endclass: refmod
